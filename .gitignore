@@ -13,6 +13,9 @@ tmtags
 ## VIM
 *.swp
 
+## ECLIPSE/APTANA
+.project
+
 ## PROJECT::GENERAL
 coverage
 rdoc
