@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.files = Dir.glob("{bin,examples,lib,rails,test}/**/*") + %w[LICENSE README.rdoc]
 
-  s.add_dependency 'activesupport', '~> 3.0.0'
+  s.add_dependency 'activesupport', '~> 3.2.0'
   s.add_dependency 'i18n'
 
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'shoulda', '~> 2.11'
+  s.add_development_dependency 'shoulda', '~> 3.1.0'
 end
 
