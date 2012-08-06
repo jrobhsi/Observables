@@ -51,7 +51,7 @@ class TestBase < Test::Unit::TestCase
     should "execute a proc passed in as changes to the event args" do
       vals = []
       @obs.subscribe(/after/){|_,a|vals << a.changes}
-      @obs.send(:changing, :a_change, :changes=>lambda {[1,2,3]}){1==1}
+      @obs.send(:changing, :a_change, :changes=>Proc.new {[1,2,3]}){1==1}
       assert_equal [1,2,3], vals[0]
     end
 

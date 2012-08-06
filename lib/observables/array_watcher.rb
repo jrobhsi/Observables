@@ -23,26 +23,26 @@ module Observables
       prev = self.dup.to_a
       if change_type == :added
         case trigger_method
-          when :"[]=" then lambda {{:added=>args[-1]}}
-          when :<<, :push, :unshift then lambda {{:added=>args}}
-          when :concat then lambda {{:added=>args[0]}}
-          when :insert then lambda {{:added=>args[1..-1]}}
-          else lambda { |cur| {:added=>(cur - prev).uniq }}
+          when :"[]=" then Proc.new {{:added=>args[-1]}}
+          when :<<, :push, :unshift then Proc.new {{:added=>args}}
+          when :concat then Proc.new {{:added=>args[0]}}
+          when :insert then Proc.new {{:added=>args[1..-1]}}
+          else Proc.new { |cur| {:added=>(cur - prev).uniq }}
         end
       elsif change_type == :removed
         case trigger_method
-          when :delete then lambda {{:removed=>args}}
-          when :delete_at then lambda {{:removed=>[prev[args[0]]]}}
-          when :delete_if, :reject! then lambda {{:removed=>prev.select(&block)}}
-          when :pop then lambda {{:removed=>[prev[-1]]}}
-          when :shift then lambda {{:removed=>[prev[0]]}}
-          else lambda { |cur| {:removed=>(prev - cur).uniq }}
+          when :delete then Proc.new {{:removed=>args}}
+          when :delete_at then Proc.new {{:removed=>[prev[args[0]]]}}
+          when :delete_if, :reject! then Proc.new {{:removed=>prev.select(&block)}}
+          when :pop then Proc.new {{:removed=>[prev[-1]]}}
+          when :shift then Proc.new {{:removed=>[prev[0]]}}
+          else Proc.new { |cur| {:removed=>(prev - cur).uniq }}
         end
       else
         case trigger_method
-          when :replace then lambda {{:removed=>prev, :added=>args[0]}}
-          when :"[]=" then lambda {{:removed=>[prev[*args[0..-2]]].flatten, :added=>[args[-1]].flatten}}
-          else lambda {|cur|{:removed=>prev.uniq, :added=>cur}}
+          when :replace then Proc.new {{:removed=>prev, :added=>args[0]}}
+          when :"[]=" then Proc.new {{:removed=>[prev[*args[0..-2]]].flatten, :added=>[args[-1]].flatten}}
+          else Proc.new {|cur|{:removed=>prev.uniq, :added=>cur}}
         end
       end
     end

@@ -92,10 +92,10 @@ module Observables
             class_eval <<-EOS
               def #{method}(*args,&block)
                 changes = changes_for(:#{change_type},:#{method},*args,&block)
-                                      changing(:#{change_type},:trigger=>:#{method}, :changes=>changes){super}
-                                             end
-                                      EOS
-                                    end
+                changing(:#{change_type},:trigger=>:#{method}, :changes=>changes){super}
+              end
+            EOS
+          end
         end
       end
     end

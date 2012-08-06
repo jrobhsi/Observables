@@ -20,19 +20,19 @@ module Observables
     def changes_for(change_type, trigger_method, *args, &block)
       prev = self.dup
       if change_type == :added
-        lambda {{:added=>[args]}}
+        Proc.new {{:added=>[args]}}
       elsif change_type == :removed
         case trigger_method
-          when :clear then lambda{{:removed=>prev.to_a}}
-          when :delete then lambda{{:removed=>[[args[0],prev[args[0]]]]}}
-          when :delete_if, :reject! then lambda{{:removed=>prev.select(&block)}}
-          when :shift then lambda { {:removed=>[prev.keys[0],prev.values[0]]}}
+          when :clear then Proc.new{{:removed=>prev.to_a}}
+          when :delete then Proc.new{{:removed=>[[args[0],prev[args[0]]]]}}
+          when :delete_if, :reject! then Proc.new{{:removed=>prev.select(&block)}}
+          when :shift then Proc.new { {:removed=>[prev.keys[0],prev.values[0]]}}
         end
       else
         case trigger_method
-          when :[]= then lambda{{:removed=>[[args[0],prev[args[0]]]],:added=>[args]}}
-          when :replace then lambda{{:removed=>prev.to_a, :added=>args[0].to_a}}
-          when :merge!, :update then lambda{{:removed=>prev.select{|k,_|args[0].keys.include?(k)},:added=>args[0].to_a}}
+          when :[]= then Proc.new{{:removed=>[[args[0],prev[args[0]]]],:added=>[args]}}
+          when :replace then Proc.new{{:removed=>prev.to_a, :added=>args[0].to_a}}
+          when :merge!, :update then Proc.new{{:removed=>prev.select{|k,_|args[0].keys.include?(k)}.to_a,:added=>args[0].to_a}}
         end
       end
     end
