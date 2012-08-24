@@ -93,7 +93,7 @@ class TestBase < Test::Unit::TestCase
       end
       should "respect a subscription pattern when notifying the parent" do
         events = []
-        @obs.set_observer(@parent, :pattern=>/before/){|_,evt,*_| events << evt}
+        @obs.set_observer(@parent, :pattern=>/before/){|_,evt,*args| events << evt}
         @obs.send(:changing,:a_change){1==1}
         assert_equal 1, events.length
         assert_equal :before_a_change, events.pop
