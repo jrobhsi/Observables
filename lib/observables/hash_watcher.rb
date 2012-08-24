@@ -25,7 +25,8 @@ module Observables
         case trigger_method
           when :clear then Proc.new{{:removed=>prev.to_a}}
           when :delete then Proc.new{{:removed=>[[args[0],prev[args[0]]]]}}
-          when :delete_if, :reject! then Proc.new{{:removed=>prev.select(&block)}}
+          # API change between 1.8.7 and 1.9.3: select returns hash instead of array
+          when :delete_if, :reject! then Proc.new{{:removed=>prev.select(&block).to_a}}
           when :shift then Proc.new { {:removed=>[prev.keys[0],prev.values[0]]}}
         end
       else
